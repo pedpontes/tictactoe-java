@@ -7,7 +7,7 @@ public class Game {
     private Player players[];
     private char tab[][];
 
-    public Game() {
+    public Game() { //construtor da classe
         this.players = new Player[2];
         this.tab = new char[3][3];
 
@@ -16,7 +16,7 @@ public class Game {
         }
     }
 
-    public void resetTab() {
+    public void resetTab() {    //reinicia o tabuleiro
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 this.tab[i][j] = ' ';
@@ -24,19 +24,20 @@ public class Game {
         }
     }
 
-    private Boolean addPos(Player pl) {
+    private Boolean addPos(Player pl) { //adiciona a tag à posicao no tabuleiro
         Scanner scan = new Scanner(System.in);
 
         System.out.println("Vez do jogador: " + pl.getName());
 
-        System.out.print("Digite a posicao na linha 0-2: ");
+        System.out.print("Digite qual a linha 0-2: ");
         int posx = scan.nextInt();
 
-        System.out.print("Digite a posicao na coluna 0-2: ");
+        System.out.print("Digite qual a coluna 0-2: ");
         int posy = scan.nextInt();
 
         if (posx >= 0 && posx < 3 && posy >= 0 && posy < 3) {
             if (this.tab[posx][posy] != ' ') {
+                System.out.println("Posicao ja ocupada, tente novamente!");
                 return false;
             }
             this.tab[posx][posy] = pl.getTag();
@@ -45,7 +46,7 @@ public class Game {
         return false;
     }
 
-    private Boolean winner(Player pl) {
+    private Boolean winner(Player pl) { //verifica se algum player venceu
         for (int i = 0; i < 3; i++) {
             if (this.tab[i][0] == pl.getTag() && this.tab[i][1] == pl.getTag() && this.tab[i][2] == pl.getTag()) {
                 return true;
@@ -65,7 +66,7 @@ public class Game {
         return false;
     }
 
-    private void addNames() {
+    private void addNames() {   //adiciona nomes e tags ao player respectivo
 
         Scanner scan = new Scanner(System.in);
         String names[] = new String[2];
@@ -75,10 +76,10 @@ public class Game {
 
         for (int i = 0; i < 2; i++) {
 
-            System.out.print("Name player " + (i + 1) + ":");
+            System.out.print("Name player " + (i + 1) + ": ");
             names[i] = scan.next();
 
-            System.out.print("Tag player " + (i + 1) + ":");
+            System.out.print("Tag player " + (i + 1) + ": ");
             tag[i] = scan.next().charAt(0);
 
             if (names[i].length() == 0)
@@ -93,7 +94,7 @@ public class Game {
         return;
     }
 
-    private void printTab() {
+    private void printTab() {   //imprime o tabuleiro no console
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 System.out.print(tab[i][j]);
@@ -105,7 +106,18 @@ public class Game {
         }
     }
 
-    public void startGame() {
+    private Boolean velha() {   //verifica se houve empate
+        int posOcup = 0;
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 2; j++) {
+                if(this.tab[i][j] != ' ') 
+                    posOcup++;
+            }
+        }
+        return (posOcup == 9) ? true : false;
+    }
+
+    public void startGame() {   //inicia o jogo
         Boolean index = false, validPos;
         resetTab();
         Player pl = null;
@@ -120,8 +132,13 @@ public class Game {
             } while (!validPos);
             printTab();
 
-        } while (!winner(pl));
+        } while (!winner(pl) || velha());
 
-        System.out.println("O jogador " + pl.getName() + "venceu!");
+        if (!velha())
+            System.out.println("O jogador " + pl.getName() + " venceu!");
+        else
+            System.out.println("Empate, jogo deu velha! Reiniciando o tabuleiro...");
+
+        startGame();
     }
 }
