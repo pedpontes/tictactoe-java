@@ -10,6 +10,10 @@ public class Game {
     public Game() {
         this.players = new Player[2];
         this.tab = new char[3][3];
+
+        for (int i = 0; i < 2; i++) {
+            this.players[i] = new Player();
+        }
     }
 
     public void resetTab() {
@@ -25,10 +29,10 @@ public class Game {
 
         System.out.println("Vez do jogador: " + pl.getName());
 
-        System.out.println("Digite a posicao na linha 0-2: ");
+        System.out.print("Digite a posicao na linha 0-2: ");
         int posx = scan.nextInt();
 
-        System.out.println("Digite a posicao na coluna 0-2: ");
+        System.out.print("Digite a posicao na coluna 0-2: ");
         int posy = scan.nextInt();
 
         if (posx >= 0 && posx < 3 && posy >= 0 && posy < 3) {
@@ -71,10 +75,10 @@ public class Game {
 
         for (int i = 0; i < 2; i++) {
 
-            System.out.println("Name player " + (i + 1) + ":");
+            System.out.print("Name player " + (i + 1) + ":");
             names[i] = scan.next();
 
-            System.out.println("Tag player " + (i + 1) + ":");
+            System.out.print("Tag player " + (i + 1) + ":");
             tag[i] = scan.next().charAt(0);
 
             if (names[i].length() == 0)
@@ -82,8 +86,6 @@ public class Game {
 
             if (tag[i] == '\n')
                 tag[i] = 'z';
-
-            this.players[i] = new Player();
 
             this.players[i].setName(names[i]);
             this.players[i].setTag(tag[i]);
